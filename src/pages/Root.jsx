@@ -8,23 +8,34 @@ export default function Root() {
   const { records, lastRecordDate } = useContext(GameContext);
   const navigate = useNavigate();
 
+  // записи, которые нужно отобразить в таблице
   const [currentRecords, setCurrentRecords] = useState([]);
 
   useEffect(() => {
+    // сортируем все записи по убыванию очков и достаем первые 5 записей
     const subRecords = records.sort((a, b) => b.score - a.score).slice(0, 5);
+
+    // если пользователь только что завершил свою попытку
     if (lastRecordDate !== "") {
+
+      //то достаем все даты из среза записей и пытаемся найти дату последней попытки
       const dates = subRecords.map((x) => {
         return x.date;
       });
+
+      // если такая дата присутствует,
       if (dates.includes(lastRecordDate)) {
+        // то отображаем в срез записей как есть
         setCurrentRecords(subRecords);
       } else {
+        // иначе принудительно добавляем запись с последней попыткой
         setCurrentRecords([
           ...subRecords,
           records.find((x) => x.date === lastRecordDate),
         ]);
       }
     } else {
+      // если последней попытки не было, то просто кладем срез записей как есть
       setCurrentRecords(subRecords);
     }
   }, [records]);
@@ -49,6 +60,7 @@ export default function Root() {
             return (
               <tr
                 key={record.date}
+                // если текущая запись - это запись последней попытки, то подсвечиваем ее
                 className={record.date === lastRecordDate ? "bg-slate-200" : ""}
               >
                 <td className={classes}>{index + 1}</td>

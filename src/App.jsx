@@ -8,6 +8,7 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [dictionary, setDictionary] = useState([]);
 
+  // при инициализации приложения достаем из сервера json со словарем
   useEffect(() => {
     fetch("http://194.147.115.197:3600/dictionary")
       .then((res) => res.json())
